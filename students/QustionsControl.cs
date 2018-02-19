@@ -52,25 +52,29 @@ namespace students
             option3Box.Text= this.dataGridView1.Rows[e.RowIndex].Cells[4].Value.ToString();
             rightAnsBox.Text = this.dataGridView1.Rows[e.RowIndex].Cells[5].Value.ToString();
         }
-
+        
         private void button1_Click(object sender, EventArgs e)
         {
-            using (SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\adisa\Documents\Visual Studio 2017\Projects\students\students\students.mdf;Integrated Security=True;Connect Timeout=30"))
+            if (String.IsNullOrWhiteSpace(questionBox.Text) || String.IsNullOrWhiteSpace(option1Box.Text) || String.IsNullOrWhiteSpace(option2Box.Text) || String.IsNullOrWhiteSpace(option3Box.Text) || String.IsNullOrWhiteSpace(rightAnsBox.Text))
+                MessageBox.Show("Cannot be empty!");
+            else
             {
-                con.Open();
-                using (SqlCommand cmd = new SqlCommand("insert into soal_tes (ep_id, question,ans1,ans2,ans3,rightAns) values (@ep_id,@question, @option1, @option2, @option3,@rightAns)", con))
+                using (SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\adisa\Documents\Visual Studio 2017\Projects\students\students\students.mdf;Integrated Security=True;Connect Timeout=30"))
                 {
-                    cmd.Parameters.AddWithValue("@question", questionBox.Text);
-                    cmd.Parameters.AddWithValue("@ep_id", this.ep_id);
-                    cmd.Parameters.AddWithValue("@option1", option1Box.Text);
-                    cmd.Parameters.AddWithValue("@option2", option2Box.Text);
-                    cmd.Parameters.AddWithValue("@option3", option2Box.Text);
-                    cmd.Parameters.AddWithValue("@rightAns", rightAnsBox.Text);
-                    cmd.ExecuteNonQuery();
+                    con.Open();
+                    using (SqlCommand cmd = new SqlCommand("insert into soal_tes (ep_id, question,ans1,ans2,ans3,rightAns) values (@ep_id,@question, @option1, @option2, @option3,@rightAns)", con))
+                    {
+                        cmd.Parameters.AddWithValue("@question", questionBox.Text);
+                        cmd.Parameters.AddWithValue("@ep_id", this.ep_id);
+                        cmd.Parameters.AddWithValue("@option1", option1Box.Text);
+                        cmd.Parameters.AddWithValue("@option2", option2Box.Text);
+                        cmd.Parameters.AddWithValue("@option3", option2Box.Text);
+                        cmd.Parameters.AddWithValue("@rightAns", rightAnsBox.Text);
+                        cmd.ExecuteNonQuery();
+                    }
                 }
-                
+                showQuestions();
             }
-            showQuestions();
         }
 
         private void deleteQuestion(int id)
