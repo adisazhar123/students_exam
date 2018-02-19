@@ -157,7 +157,6 @@
     <None Include="studentsDataSet.xss">
       <DependentUpon>studentsDataSet.xsd</DependentUpon>
     </None>
-    <None Include="students_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
