@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Threading;
+using MySql.Data.MySqlClient;
 
 namespace students
 {
@@ -17,27 +18,30 @@ namespace students
         private int id;
         Thread th;
         Login loginForm;
+        DBConnection dbc;
+        ExamControls examcontrols;
+
 
         public Form1()
         {
             InitializeComponent();
+            dbc = new DBConnection();
+            dbc.con = new MySqlConnection(dbc.connectionString);
+            dbc.openConnection();
+
             displayData();
         }
 
         private void displayData()
         {
-            using (SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\adisa\Documents\Visual Studio 2017\Projects\students\students\students.mdf;Integrated Security=True;Connect Timeout=30"))
+            using (MySqlDataAdapter sda = new MySqlDataAdapter("select * from students", dbc.con))
             {
-                con.Open();
-                using (SqlDataAdapter sda = new SqlDataAdapter("select * from students", con))
-                {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    dataGridView1.DataSource = dt;
-                    this.dataGridView1.Columns["Id"].Visible = false;
-                }
-                con.Close();
-            }       
+                DataTable dt = new DataTable();
+                sda.Fill(dt);
+                dataGridView1.DataSource = dt;
+                this.dataGridView1.Columns["Id"].Visible = false;
+            }
+                dbc.con.Close();      
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -60,23 +64,22 @@ namespace students
 
         private void save_Click(object sender, EventArgs e)
         {
+            dbc.openConnection();
+
             if (String.IsNullOrWhiteSpace(nameBox.Text) || String.IsNullOrWhiteSpace(departmentBox.Text) || String.IsNullOrWhiteSpace(facultyBox.Text))
             {
                 MessageBox.Show("Please choose a student to delete.");
             }
             else
             {
-                using (SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\adisa\Documents\Visual Studio 2017\Projects\students\students\students.mdf;Integrated Security=True;Connect Timeout=30"))
-                {
-                    con.Open();
-                    using (SqlCommand cmd = new SqlCommand("insert into students values (@name, @department, @faculty)", con))
+                    using (MySqlCommand cmd = new MySqlCommand("insert into students (name,department,faculty) values (@name, @department, @faculty)", dbc.con))
                     {
                         cmd.Parameters.AddWithValue("@name", nameBox.Text);
                         cmd.Parameters.AddWithValue("@department", departmentBox.Text);
                         cmd.Parameters.AddWithValue("@faculty", facultyBox.Text);
                         cmd.ExecuteNonQuery();
                     }
-                }
+                
 
                 displayData();
             }
@@ -91,26 +94,22 @@ namespace students
             }
             else
             {
-                using (SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\adisa\Documents\Visual Studio 2017\Projects\students\students\students.mdf;Integrated Security=True;Connect Timeout=30"))
+                dbc.openConnection();
+                using (MySqlCommand cmd = new MySqlCommand("Delete from students where id = @id", dbc.con))
                 {
-                    con.Open();
-                    using (SqlCommand cmd = new SqlCommand("Delete from students where id = @id", con))
-                    {
-                        cmd.Parameters.AddWithValue("@id", id);
-                        cmd.ExecuteNonQuery();
-                        MessageBox.Show("Deleted");
-                    }
-                    displayData();
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show("Deleted");
                 }
+                displayData();
             }
         }
 
         private void update_Click(object sender, EventArgs e)
         {
-            using (SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\adisa\Documents\Visual Studio 2017\Projects\students\students\students.mdf;Integrated Security=True;Connect Timeout=30"))
-            {
-                con.Open();
-                using (SqlCommand cmd = new SqlCommand("update students set name = @name, department = @department, faculty=@faculty where id = @id", con))
+                
+                dbc.con.Open();
+                using (MySqlCommand cmd = new MySqlCommand("update students set name = @name, department = @department, faculty=@faculty where id = @id", dbc.con))
                 {
                     cmd.Parameters.AddWithValue("@id", id);
                     cmd.Parameters.AddWithValue("@name", nameBox.Text);
@@ -121,7 +120,7 @@ namespace students
                     MessageBox.Show("Updated");
                 }
                 displayData();
-            }
+            
             
         }
 
@@ -170,7 +169,8 @@ namespace students
 
         private void examPacketsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            examcontrols = new ExamControls();
+            examcontrols.Show();
         }
     }
 }

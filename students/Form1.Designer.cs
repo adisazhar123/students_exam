@@ -46,8 +46,9 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.examPacketsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.studentsDataSetBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.studentsDataSet)).BeginInit();
@@ -181,6 +182,7 @@
             // 
             // menuStrip1
             // 
+            this.menuStrip1.BackColor = System.Drawing.SystemColors.ControlLight;
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
@@ -203,9 +205,16 @@
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(172, 26);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
+            // examPacketsToolStripMenuItem
+            // 
+            this.examPacketsToolStripMenuItem.Name = "examPacketsToolStripMenuItem";
+            this.examPacketsToolStripMenuItem.Size = new System.Drawing.Size(172, 26);
+            this.examPacketsToolStripMenuItem.Text = "Exam Packets";
+            this.examPacketsToolStripMenuItem.Click += new System.EventHandler(this.examPacketsToolStripMenuItem_Click);
             // 
             // optionsToolStripMenuItem
             // 
@@ -213,18 +222,22 @@
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(73, 24);
             this.optionsToolStripMenuItem.Text = "Options";
             // 
-            // examPacketsToolStripMenuItem
+            // label1
             // 
-            this.examPacketsToolStripMenuItem.Name = "examPacketsToolStripMenuItem";
-            this.examPacketsToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
-            this.examPacketsToolStripMenuItem.Text = "Exam Packets";
-            this.examPacketsToolStripMenuItem.Click += new System.EventHandler(this.examPacketsToolStripMenuItem_Click);
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(785, 78);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(72, 17);
+            this.label1.TabIndex = 13;
+            this.label1.Text = "أَبْجَدِيَّة العَرَبِيَّة‎ ";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.Gainsboro;
             this.ClientSize = new System.Drawing.Size(1019, 541);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.loginBtn);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.delete);
@@ -273,6 +286,7 @@
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem examPacketsToolStripMenuItem;
+        private System.Windows.Forms.Label label1;
     }
 }
 

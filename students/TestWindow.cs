@@ -7,12 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Data.SqlClient;
+using MySql.Data.MySqlClient;
 
 namespace students
 {
     public partial class TestWindow : Form
     {
+        DBConnection dbc;
         private int ticks=75;
         List<QuestionData> myList;
         List<string> myListofAnswers;
@@ -20,18 +21,25 @@ namespace students
         private int questionNo=0;
         private int[] isQuestionAnswered;
 
+
+        //  UNTUK MENYIMPAN JAWABAN DAN QUESTION ID SOAL
+        List<(string ans, int question_id)> myListofAnswers2;
+
         public TestWindow()
         {
             InitializeComponent();
+            dbc = new DBConnection();
+            dbc.con = new MySqlConnection(dbc.connectionString);
+            dbc.openConnection();
             timer1.Start();
             myList = new List<QuestionData>();
             myListofAnswers = new List<string>();
+            myListofAnswers2 = new List<(string ans, int question_id)>();
             isQuestionAnswered = new int[100];
             Array.Clear(isQuestionAnswered, 0, isQuestionAnswered.Length);
 
-            using (SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\adisa\Documents\Visual Studio 2017\Projects\students\students\students.mdf;Integrated Security=True;Connect Timeout=30"))
-            {
-                using (SqlDataAdapter sda = new SqlDataAdapter("select * from soal_tes where ep_id = 1", con))
+ 
+                using (MySqlDataAdapter sda = new MySqlDataAdapter("select * from soal_tes where ep_id = 1", dbc.con))
                 {                   
                     DataTable dt = new DataTable();
                     sda.Fill(dt);
@@ -43,12 +51,13 @@ namespace students
                         myQuestions.ans2 = row["ans2"].ToString();
                         myQuestions.ans3 = row["ans3"].ToString();
                         myQuestions.rightAns = row["rightAns"].ToString();
+                        myQuestions.question_id = Convert.ToInt32(row["ep_id"].ToString());
 
                         myList.Add(myQuestions);
 
                     }
                 }
-            }
+            
             questionBox.Text = myList[questionNo].question;
             ansA.Text = myList[questionNo].ans1;
             ansB.Text = myList[questionNo].ans2;
@@ -165,7 +174,10 @@ namespace students
             myList[questionNo].selectedAns = 'A';
 
             if (Convert.ToBoolean(isQuestionAnswered[questionNo]))
+            {
                 myListofAnswers[questionNo] = ansA.Text;
+                
+            }
             else
             {
 
@@ -230,22 +242,17 @@ namespace students
 
         private void submitAnswers()
         {
-            using (SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\adisa\Documents\Visual Studio 2017\Projects\students\students\students.mdf;Integrated Security=True;Connect Timeout=30"))
+            dbc.openConnection();
+            using (MySqlCommand cmd = new MySqlCommand("insert into student_answers (ans, question_id, packet_id) values (@myAns, @question_id, @packet_id)", dbc.con))
             {
-                con.Open();
-                using (SqlCommand cmd = new SqlCommand("insert into student_answers values (@myAns)", con))
+                for (int i = 0; i < myListofAnswers.Count(); i++)
                 {
-                    for (int i = 0; i < myListofAnswers.Count(); i++)
-                    {
-                        cmd.Parameters.AddWithValue("@myAns", myListofAnswers[i]);
-                        cmd.ExecuteNonQuery();
-                        cmd.Parameters.Clear();
-                    }
+                    cmd.Parameters.AddWithValue("@myAns", myListofAnswers[i]);
+                    cmd.ExecuteNonQuery();
+                    cmd.Parameters.Clear();
                 }
-                MessageBox.Show("Submitted!");
             }
+            MessageBox.Show("Submitted!");
         }
-
-   
     }
 }
