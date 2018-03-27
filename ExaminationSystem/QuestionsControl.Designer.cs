@@ -1,4 +1,4 @@
-﻿namespace students
+﻿namespace ExaminationSystem
 {
     partial class QuestionsControl
     {

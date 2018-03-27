@@ -11,7 +11,7 @@ using System.Data.SqlClient;
 using System.Threading;
 using MySql.Data.MySqlClient;
 
-namespace students
+namespace ExaminationSystem
 {
     public partial class Form1 : Form
     {

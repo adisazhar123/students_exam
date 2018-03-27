@@ -1,4 +1,4 @@
-﻿namespace students
+﻿namespace ExaminationSystem
 {
     partial class Form1
     {
@@ -30,8 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.studentsDataSetBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.studentsDataSet = new students.studentsDataSet();
             this.nameBox = new System.Windows.Forms.TextBox();
             this.departmentBox = new System.Windows.Forms.TextBox();
             this.facultyBox = new System.Windows.Forms.TextBox();
@@ -50,8 +48,6 @@
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.studentsDataSetBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.studentsDataSet)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -72,15 +68,6 @@
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
-            // studentsDataSetBindingSource
-            // 
-            this.studentsDataSetBindingSource.DataSource = this.studentsDataSet;
-            this.studentsDataSetBindingSource.Position = 0;
-            // 
-            // studentsDataSet
-            // 
-            this.studentsDataSet.DataSetName = "studentsDataSet";
-            this.studentsDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
             // nameBox
             // 
@@ -256,8 +243,6 @@
             this.Text = "My Students";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.studentsDataSetBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.studentsDataSet)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -274,8 +259,6 @@
         private System.Windows.Forms.Label name;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.BindingSource studentsDataSetBindingSource;
-        private studentsDataSet studentsDataSet;
         private System.Windows.Forms.Button save;
         private System.Windows.Forms.Button update;
         private System.Windows.Forms.Button delete;

@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using System.Data.SqlClient;
 using MySql.Data.MySqlClient;
 
-namespace students
+namespace ExaminationSystem
 {
     public partial class ExamControls : Form
     {

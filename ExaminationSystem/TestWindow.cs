@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 
-namespace students
+namespace ExaminationSystem
 {
     public partial class TestWindow : Form
     {
@@ -243,7 +243,7 @@ namespace students
         private void submitAnswers()
         {
             dbc.openConnection();
-            using (MySqlCommand cmd = new MySqlCommand("insert into student_answers (ans, question_id, packet_id) values (@myAns, @question_id, @packet_id)", dbc.con))
+            using (MySqlCommand cmd = new MySqlCommand("insert into student_answers (ans) values (@myAns)", dbc.con))
             {
                 for (int i = 0; i < myListofAnswers.Count(); i++)
                 {
