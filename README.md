@@ -15,7 +15,8 @@ Progress:
     1. Different languages support for exam questions.
     2. Better UI. (Sorry it sucks at the moment hehe).
     3. More memory efficient (too many frames open), I plan to stay on one frame with various tabs or panels.
-    4. etc.
+    4. Monitor students' progress/ activities.
+    5. More to come.
     
 Enjoy :)
 
