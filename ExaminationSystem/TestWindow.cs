@@ -17,13 +17,14 @@ namespace ExaminationSystem
         private int ticks=75;
         List<QuestionData> myList;
         List<string> myListofAnswers;
+        List<int> questionId;
         QuestionData myQuestions;
         private int questionNo=0;
         private int[] isQuestionAnswered;
-
+        int packet_id;
 
         //  UNTUK MENYIMPAN JAWABAN DAN QUESTION ID SOAL
-        List<(string ans, int question_id)> myListofAnswers2;
+        //List<(string ans, int question_id)> myListofAnswers2;
 
         public TestWindow()
         {
@@ -33,11 +34,11 @@ namespace ExaminationSystem
             dbc.openConnection();
             timer1.Start();
             myList = new List<QuestionData>();
+            questionId = new List<int>();
+
             myListofAnswers = new List<string>();
-            myListofAnswers2 = new List<(string ans, int question_id)>();
             isQuestionAnswered = new int[100];
             Array.Clear(isQuestionAnswered, 0, isQuestionAnswered.Length);
-
  
                 using (MySqlDataAdapter sda = new MySqlDataAdapter("select * from soal_tes where ep_id = 1", dbc.con))
                 {                   
@@ -51,8 +52,8 @@ namespace ExaminationSystem
                         myQuestions.ans2 = row["ans2"].ToString();
                         myQuestions.ans3 = row["ans3"].ToString();
                         myQuestions.rightAns = row["rightAns"].ToString();
-                        myQuestions.question_id = Convert.ToInt32(row["ep_id"].ToString());
-
+                        myQuestions.question_id = Convert.ToInt32(row["id"].ToString());
+                        packet_id = Convert.ToInt32(row["ep_id"].ToString());
                         myList.Add(myQuestions);
 
                     }
@@ -180,8 +181,8 @@ namespace ExaminationSystem
             }
             else
             {
-
                 myListofAnswers.Add(ansA.Text);
+                questionId.Add(myList[questionNo].question_id);
                 isQuestionAnswered[questionNo] = 1;
             }
         }
@@ -195,6 +196,7 @@ namespace ExaminationSystem
             else
             {
                 myListofAnswers.Add(ansB.Text);
+                questionId.Add(myList[questionNo].question_id);
                 isQuestionAnswered[questionNo] = 1;
             }
         }
@@ -209,6 +211,7 @@ namespace ExaminationSystem
             else
             {
                 myListofAnswers.Add(ansC.Text);
+                questionId.Add(myList[questionNo].question_id);
                 isQuestionAnswered[questionNo] = 1;
 
             }
@@ -221,9 +224,12 @@ namespace ExaminationSystem
 
             if (Convert.ToBoolean(isQuestionAnswered[questionNo]))
                 myListofAnswers[questionNo] = ansD.Text;
+
             else
             {
+
                 myListofAnswers.Add(ansD.Text);
+                questionId.Add(myList[questionNo].question_id);
                 isQuestionAnswered[questionNo] = 1;
 
             }
@@ -235,19 +241,24 @@ namespace ExaminationSystem
             {
                 timer1.Stop();
                 submitAnswers();
-                MessageBox.Show(myListofAnswers.Count().ToString());
+                MessageBox.Show("mylistofanswers is " + myListofAnswers.Count().ToString());
+                MessageBox.Show("mylistofquestion_id is " + questionId.Count().ToString());
                 myListofAnswers.Clear();
+                questionId.Clear();
             }
         }
 
         private void submitAnswers()
         {
             dbc.openConnection();
-            using (MySqlCommand cmd = new MySqlCommand("insert into student_answers (ans) values (@myAns)", dbc.con))
+            using (MySqlCommand cmd = new MySqlCommand("insert into student_answers (ans, question_id, packet_id) values (@my_ans, @question_id, @packet_id)", dbc.con))
             {
                 for (int i = 0; i < myListofAnswers.Count(); i++)
                 {
-                    cmd.Parameters.AddWithValue("@myAns", myListofAnswers[i]);
+                    cmd.Parameters.AddWithValue("@my_ans", myListofAnswers[i]);
+                    cmd.Parameters.AddWithValue("@question_id", questionId[i]);
+                    cmd.Parameters.AddWithValue("@packet_id", packet_id);
+
                     cmd.ExecuteNonQuery();
                     cmd.Parameters.Clear();
                 }
